@@ -2,7 +2,7 @@ name: Tests Pipeline
 
 on:
   push:
-    branches: [ master, feat/gh-actions-docker-build ]
+    branches: [ master, feat/gh-actions-debug-tests ]
     tags:
       - 'v*'
   pull_request:
