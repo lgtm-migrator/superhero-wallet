@@ -57,7 +57,7 @@ export const defaultNetworks = [
   {
     url: 'https://testnet.aeternity.io',
     networkId: 'ae_uat',
-    middlewareUrl: 'https://testnet.aeternity.io/mdw',
+    middlewareUrl: 'https://testnet.aeternity.art/mdw',
     explorerUrl: 'https://explorer.testnet.aeternity.io',
     compilerUrl: 'https://latest.compiler.aepps.com',
     backendUrl: 'https://testnet.superhero.aeternity.art',
@@ -68,7 +68,7 @@ export const defaultNetworks = [
   {
     url: 'https://mainnet.aeternity.io',
     networkId: 'ae_mainnet',
-    middlewareUrl: 'https://mainnet.aeternity.io/mdw',
+    middlewareUrl: 'https://mainnet.aeternity.art/mdw',
     explorerUrl: 'https://explorer.aeternity.io',
     compilerUrl: 'https://compiler.aepps.com',
     backendUrl: 'https://raendom-backend.z52da5wt.xyz',
