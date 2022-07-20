@@ -4,20 +4,7 @@
     data-cy="balance-info"
   >
     <div class="balance-wrapper">
-      <Dropdown
-        v-if="tokenBalancesOptions.length"
-        :options="tokenBalancesOptions"
-        :method="changeToken"
-        data-cy="tokens-dropdown"
-      >
-        <template slot="display">
-          <span class="display-value">
-            {{ selectedToken ? selectedToken.convertedBalance : balances[idx].toFixed(2) }}
-          </span>
-          <span class="token-symbol">{{ !selectedToken ? $t('ae') : selectedToken.symbol }}</span>
-          <Arrow class="expand-arrow" />
-        </template>
-      </Dropdown>
+      <AeBalance :balance="Number(balances[idx])" />
       <Dropdown
         v-if="currentToken === 'default'"
         :options="currenciesOptions"
@@ -30,7 +17,10 @@
           <span class="display-value">
             {{ formatCurrency(balances[idx] * currentCurrencyRate) }}
           </span>
-          <Arrow class="expand-arrow" />
+          <Arrow
+            v-show="false"
+            class="expand-arrow"
+          />
         </template>
       </Dropdown>
     </div>
@@ -42,11 +32,13 @@ import { pick } from 'lodash-es';
 import { mapGetters, mapState } from 'vuex';
 import Arrow from '../../../icons/arrow.svg?vue-component';
 import Dropdown from './Dropdown.vue';
+import AeBalance from './AeBalance.vue';
 
 export default {
   components: {
-    Arrow,
     Dropdown,
+    AeBalance,
+    Arrow,
   },
   props: {
     accountIdx: { type: Number, default: -1 },
@@ -106,28 +98,27 @@ export default {
 @use '../../../styles/typography';
 
 .balance-info {
-  height: 55px;
-  display: flex;
-
   .balance-wrapper {
-    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;;
 
     .dropdown {
-      margin-top: 6px;
-      text-align: end;
+      text-align: center;
 
       &:only-child {
         text-align: center;
       }
 
       &.currenciesgroup {
-        .approx-sign {
-          margin-top: 3px;
-          color: variables.$color-white;
-        }
+        @extend %face-sans-16-medium;
+        line-height: 18px;
+        opacity: 0.75;
 
-        span {
-          @extend %face-sans-16-regular;
+        .approx-sign {
+          vertical-align: top;
+          color: variables.$color-white;
         }
       }
 
@@ -142,27 +133,6 @@ export default {
         .list .button-plain {
           @extend %face-sans-16-regular;
         }
-      }
-
-      .token-symbol {
-        color: variables.$color-blue;
-
-        + .expand-arrow {
-          vertical-align: middle;
-        }
-      }
-
-      .display-value,
-      .token-symbol {
-        @extend %face-sans-20-regular;
-
-        vertical-align: text-top;
-      }
-
-      .expand-arrow {
-        height: 16px;
-        width: 16px;
-        color: variables.$color-dark-grey;
       }
     }
   }

@@ -69,7 +69,7 @@ export default {
     return networks[network];
   },
   getProfileImage: (_, { activeNetwork }) => (address) => `${activeNetwork.backendUrl}/profile/image/${address}`,
-  getAvatar: () => (address) => `${AVATAR_URL}${address}`,
+  getAvatar: () => (address, color) => `${AVATAR_URL}${address}?color=${encodeURIComponent(color)}`,
   tippingSupported(state, { activeNetwork }) {
     return (
       ['ae_mainnet', 'ae_uat'].includes(activeNetwork.networkId) || process.env.RUNNING_IN_TESTS

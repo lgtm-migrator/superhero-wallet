@@ -1,106 +1,42 @@
 <template>
   <div :class="['account-info', { edit }]">
-    <div class="buttons">
-      <ButtonPlain
-        class="minify"
-        @click="$store.commit('toggleMinifiedCard')"
-      >
-        <Component
-          :is="cardMinified ? 'Expand' : 'Collapse'"
-        />
-      </ButtonPlain>
-      <div>
-        <ButtonPlain
-          v-clipboard:copy="accounts[idx].address"
-          data-cy="copy"
-          @click="copy"
-        >
-          <Copy />
-        </ButtonPlain>
-        <ButtonPlain
-          v-if="UNFINISHED_FEATURES && idx === 0"
-          @click="createAccount"
-        >
-          <Add />
-        </ButtonPlain>
-        <ButtonPlain
-          v-if="idx !== 0 && $route.path === '/accounts'"
-          class="remove"
-          @click="remove"
-        >
-          <Remove />
-        </ButtonPlain>
-        <RouterLink
-          v-if="UNFINISHED_FEATURES && $route.path !== '/accounts'"
-          to="/accounts"
-        >
-          <Settings />
-        </RouterLink>
-      </div>
-    </div>
     <div class="title">
       <Avatar
+        class="avatar"
         :address="accounts[idx].address"
         :name="accounts[idx].name"
+        :color="color"
       />
       <div
-        class="account-name"
-        data-cy="account-name"
+        class="account-details"
       >
-        <a
-          v-if="accounts[idx].name"
-          :href="explorerUrl"
-          target="_blank"
-        >
-          <Truncate :str="accounts[idx].name" />
-        </a>
-        <router-link
+        <div v-if="!copied">
+          <router-link
+            :to="{ name: 'name-claim' }"
+            class="account-name"
+          >
+            <span v-if="accounts[idx].name">
+              <Truncate :str="accounts[idx].name" />
+            </span>
+            <span v-else>
+              {{ $t('pages.account.heading') }} {{ accountIdx + 1 }}
+            </span>
+          </router-link>
+          <a
+            class="ae-address"
+            @click="copy"
+          >
+            {{ truncateAdrress(accounts[idx].address) }}
+          </a>
+        </div>
+        <div
           v-else
-          :to="{ name: 'name-claim' }"
-          data-cy="claim-name"
-          class="claim-chainname"
+          class="copied"
         >
-          {{ $t('pages.account.claim-name') }}
-        </router-link>
-        <InputField
-          v-model="customAccountName"
-          :maxlength="maxCustomNameLength"
-          :readonly="idx === 0 || $route.path !== '/accounts' || !edit"
-          plain
-        >
-          <template slot="right">
-            <ButtonPlain
-              v-show="idx !== 0 && $route.path === '/accounts' && !edit"
-              @click="edit = true"
-            >
-              <Edit />
-            </ButtonPlain>
-            <ButtonPlain
-              v-show="edit"
-              @click="saveLocalName"
-            >
-              <Save />
-            </ButtonPlain>
-          </template>
-        </InputField>
-        <label v-if="edit">{{ `${customAccountName.length}/${maxCustomNameLength}` }}</label>
+          <CheckedCircleIcon />
+          <span class="text">{{ $t('addressCopied') }}</span>
+        </div>
       </div>
-    </div>
-    <a
-      v-if="!copied"
-      :href="explorerUrl"
-      target="_blank"
-      class="ae-address"
-    >
-      {{ accounts[idx].address }}
-    </a>
-    <div
-      v-else
-      class="copied"
-    >
-      <span />
-      <span class="text">{{ $t('addressCopied') }}</span>
-      <span />
     </div>
   </div>
 </template>
@@ -109,36 +45,19 @@
 import { mapState, mapGetters, mapActions } from 'vuex';
 import CopyMixin from '../../../mixins/copy';
 import Avatar from './Avatar.vue';
+import CheckedCircleIcon from '../../../icons/account-card/checked-circle.svg?vue-component';
 import Truncate from './Truncate.vue';
-import InputField from './InputField.vue';
-import ButtonPlain from './ButtonPlain.vue';
-import Collapse from '../../../icons/account-card/collapse.svg?vue-component';
-import Expand from '../../../icons/account-card/expand.svg?vue-component';
-import Add from '../../../icons/account-card/btn-add-subaccount.svg?vue-component';
-import Copy from '../../../icons/account-card/btn-copy-address.svg?vue-component';
-import Settings from '../../../icons/settings.svg?vue-component';
-import Remove from '../../../icons/account-card/btn-remove.svg?vue-component';
-import Edit from '../../../icons/account-card/btn-edit.svg?vue-component';
-import Save from '../../../icons/account-card/btn-save.svg?vue-component';
 
 export default {
   components: {
     Avatar,
-    Collapse,
-    Expand,
-    Add,
-    Copy,
-    Settings,
-    Remove,
-    Edit,
-    Save,
+    CheckedCircleIcon,
     Truncate,
-    InputField,
-    ButtonPlain,
   },
   mixins: [CopyMixin],
   props: {
     accountIdx: { type: Number, default: -1 },
+    color: { type: String, required: true },
   },
   data: () => ({
     edit: false,
@@ -176,6 +95,11 @@ export default {
       });
       this.$store.commit('accounts/remove', this.idx);
     },
+    truncateAdrress() {
+      const addressFields = this.accounts[this.idx].address.match(/.{3}/g);
+      return `${addressFields.slice(0, 3).reduce((acc, current) => `${acc} ${current}`)} ···
+      ${addressFields.slice(-3).reduce((acc, current) => `${acc} ${current}`)}`;
+    },
   },
 };
 </script>
@@ -185,58 +109,9 @@ export default {
 @use '../../../styles/typography';
 
 .account-info {
-  padding: 20px 20px 0 20px;
+  padding: 12px 12px 5px 12px;
   text-align: left;
   margin-bottom: 4px;
-
-  &.edit {
-    margin-bottom: -2px;
-
-    .title {
-      margin-bottom: 0;
-
-      .account-name .account-type-name {
-        border-bottom: 1px solid variables.$color-blue;
-      }
-    }
-  }
-
-  .buttons {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 24px;
-
-    svg {
-      width: 24px;
-      height: 24px;
-    }
-
-    a,
-    .button-plain,
-    .minify {
-      color: variables.$color-light-grey;
-    }
-
-    a,
-    .button-plain {
-      &:not(:first-child) {
-        margin-left: 8px;
-      }
-
-      &:hover {
-        color: variables.$color-green;
-
-        &.remove {
-          color: variables.$color-error;
-        }
-      }
-    }
-
-    .minify:hover {
-      color: variables.$color-blue;
-    }
-  }
 
   .title {
     display: flex;
@@ -245,82 +120,69 @@ export default {
     margin-top: 8px;
     margin-bottom: 6px;
 
-    @extend %face-sans-14-medium;
-
     line-height: 16px;
 
     .avatar {
       align-self: flex-start;
       margin-right: 8px;
       overflow: visible;
+      width: 48px;
+      height: 48px;
+      background-color: variables.$color-black;
     }
 
     .input-field ::v-deep .main-wrapper button {
       background-color: transparent;
     }
 
-    .account-name {
+    .account-details {
       display: flex;
+      flex-wrap: nowrap;
+      justify-content: center;
       flex-direction: column;
-      justify-content: flex-start;
+      width:203px;
+      height: 48px;
 
-      a {
+      .account-name {
+        @extend %face-sans-16-600;
+        flex: 1;
+        font-weight: 600;
+        font-size: 16px;
         color: variables.$color-white;
         text-decoration: none;
-        max-width: 250px;
+      }
+      .ae-address {
+        @extend %face-mono-14-medium;
+        color: variables.$color-white;
+        display: flex;
+        opacity: 0.85;
+        width: 130%;
+        margin-top: 8px;
+        text-decoration: none;
 
         &:hover {
+          color: variables.$color-white;
+          opacity: 1;
           text-decoration: underline;
         }
       }
 
-      .claim-chainname {
-        color: variables.$color-green;
-      }
+      .copied {
+        align-items: center;
+        justify-content: center;
+        display: flex;
+        flex: 0.9;
+        border: dashed 1.1px #FFF;
+        border-radius: 5px;
 
-      label {
-        font-size: 10px;
-        line-height: 12px;
-        opacity: 0.5;
-        align-self: flex-end;
-      }
-    }
-  }
+        svg {
+          margin-right: 6px;
+        }
 
-  .ae-address {
-    display: block;
-    text-decoration: none;
-    text-align: center;
-    color: variables.$color-light-grey;
-
-    @extend %face-mono-10-medium;
-
-    font-size: 9px;
-
-    &:hover {
-      color: variables.$color-white;
-    }
-  }
-
-  .copied {
-    display: flex;
-    align-items: center;
-
-    span {
-      width: 100%;
-
-      &:not(.text) {
-        border-bottom: 1px dashed variables.$color-blue;
-        margin: 0 8px;
-      }
-
-      &.text {
-        white-space: nowrap;
-        color: variables.$color-blue;
-
-        @extend %face-sans-14-regular;
-
-        line-height: 16px;
+        .text {
+          @extend %face-sans-16-medium;
+          white-space: nowrap;
+        }
       }
     }
   }

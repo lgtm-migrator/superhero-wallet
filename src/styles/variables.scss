@@ -16,6 +16,7 @@ $color-blue-alpha-10: rgba(17, 97, 254, 0.1);
 $color-green: #00ff9d;
 $color-green-hover: #00dc87;
 $color-green-alpha-10: rgba(0, 255, 157, 0.1);
+$color-lighter-grey: #ccdbff;
 $color-light-grey: #babac0;
 $color-dark-grey: #787878;
 $color-darker-grey: #161616;
@@ -31,3 +32,9 @@ $color-hover: #1c1c1c;
 
 $color-warning: #ffaa29;
 $color-error: #ff4746;
+
+$color-account-blue: #3270FF;
+
+:export {
+  defaultAccountColor: $color-account-blue;
+}

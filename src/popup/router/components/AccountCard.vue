@@ -3,40 +3,81 @@
     :class="[
       'account-card',
       { subaccount: idx !== 0, 'first-subaccount': idx === 1, minified: cardMinified }]"
-    :style="cssVar"
+    :style="cardCssProps"
   >
-    <AccountInfo v-bind="$attrs" />
-    <BalanceInfo v-bind="$attrs" />
-    <Triangle
-      v-if="!cardMinified"
-      class="triangle"
-    />
+    <div class="account-info">
+      <AccountInfo
+        v-bind="$attrs"
+        :color="color"
+      />
+    </div>
+    <div class="balance-info">
+      <BalanceInfo v-bind="$attrs" />
+    </div>
+    <div class="misc">
+      <div class="total-tokens">
+        <span class="digit">
+          {{ totalTokens }}
+        </span>
+        <span class="wording">
+          {{ $t('pages.fungible-tokens.tokens') }}
+        </span>
+      </div>
+      <div
+        class="receiveIcon"
+        :to="{ name: 'name-claim' }"
+      >
+        <ReceiveIcon
+          :style="iconCssProps"
+        />
+      </div>
+      <div
+        class="sendIcon"
+        :to="{ name: 'name-claim' }"
+      >
+        <SendIcon
+          :style="iconCssProps"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import AccountInfo from './AccountInfo.vue';
 import BalanceInfo from './BalanceInfo.vue';
-import Triangle from '../../../icons/account-card/card-bg-triangle.svg?vue-component';
+import ReceiveIcon from '../../../icons/account-card/account-receive.svg?vue-component';
+import SendIcon from '../../../icons/account-card/account-send.svg?vue-component';
+import { getAddressColor } from '../../utils/avatar';
 
 export default {
   components: {
     AccountInfo,
     BalanceInfo,
-    Triangle,
+    SendIcon,
+    ReceiveIcon,
   },
   props: {
     idx: { type: Number, required: true },
-    color: { type: String, required: true },
     shift: { type: Number, required: true },
   },
   computed: {
     ...mapState(['cardMinified']),
-    cssVar() {
+    ...mapGetters('fungibleTokens', ['getTokenBalance']),
+    ...mapGetters(['accounts']),
+    cardCssProps() {
+      return { 'background-color': this.color };
+    },
+    totalTokens() {
+      return this.getTokenBalance(this.accounts[this.idx].address).length;
+    },
+    color() {
+      return getAddressColor(this.accounts[this.idx].address);
+    },
+    iconCssProps() {
       return {
-        '--shift': this.shift,
-        '--color': this.color,
+        '--primaryColor': this.color,
       };
     },
   },
@@ -45,55 +86,65 @@ export default {
 
 <style lang="scss" scoped>
 @use '../../../styles/variables';
+@use '../../../styles/typography';
 
 .account-card {
   display: flex;
   flex-direction: column;
-  position: relative;
   width: 328px;
-  height: 169px;
-  border-radius: 6px;
-  background-image: url('../../../icons/account-card/account-bg-pattern.svg');
-  background-color: #0a0e16;
-  background-position: calc(var(--shift) * 15px) calc(var(--shift) * 20px);
-  clip-path: inset(0% 0% -200% 0%);
-  transition: height 0.2s ease-out, clip-path 0.1s step-end;
+  height: 192px;
+  border-radius: 12px;
+  margin: 8px 16px 32px 16px;
+  align-items: flex-start;
 
-  &.minified {
-    height: 109px;
-    clip-path: inset(0% 0% 0% 0%);
-    transition-timing-function: ease-out, step-start;
-  }
-
-  &.subaccount {
-    background-image: url('../../../icons/account-card/subaccount-bg-pattern.svg');
-    background-color: variables.$color-bg-1;
-
-    &.first-subaccount {
-      background-color: #131b2a;
+    .account-info {
+      flex: 1.3;
     }
-  }
 
-  &:hover {
-    box-shadow: inset 0 0 0 1000px rgba(17, 97, 254, 0.1);
-  }
+    .balance-info {
+      flex:1.7;
+      align-self: center;
+      margin-bottom: 0;
+    }
 
-  .account-info {
-    padding: 6px 6px 0 6px;
-  }
+    .misc {
+      flex:1;
+      margin-left: 12px;
+      margin-bottom: 12px;
+      width: 100%;
+      display:flex;
+      flex-direction: row;
+      align-items: flex-end;
 
-  .balance-info {
-    margin-bottom: 0;
-  }
+      .total-tokens {
+        @extend %face-sans-14-medium;
+        order:1;
 
-  .triangle {
-    position: absolute;
-    bottom: 0;
-    height: 23px;
-    width: 23px;
-    border-radius: 0 0 5px 0;
-    align-self: flex-end;
-    color: var(--color);
-  }
+        .wording {
+          opacity: 0.85;
+        }
+      }
+
+      .receiveIcon {
+        order:2;
+        align-self: flex-end;
+        margin-left: auto;
+
+        svg path{
+          fill: var(--primaryColor);
+        }
+      }
+
+      .sendIcon {
+        order:3;
+        align-self: flex-end;
+        margin-left: 8px;
+        margin-right: 28px;
+
+        path{
+          fill: var(--primaryColor);
+        }
+      }
+    }
 }
 </style>
