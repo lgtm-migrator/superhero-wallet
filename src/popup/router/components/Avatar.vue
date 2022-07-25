@@ -19,7 +19,6 @@ export default {
       default: 'normal',
     },
     src: { type: String, default: '' },
-    color: { type: String, required: true },
   },
   data: () => ({
     error: false,
@@ -32,7 +31,7 @@ export default {
       return getProfileImage(this.address);
     },
     avatar(state, { getAvatar }) {
-      return getAvatar(this.address, this.color);
+      return getAvatar(this.name || this.address);
     },
   }),
 };

@@ -1,8 +1,7 @@
 <template>
   <div class="ae-balance">
     <span class="token-symbol">Æ </span>
-    <span class="token-integer">{{ integerPart }}</span>
-    <span>.</span>
+    <span class="token-integer">{{ `${integerPart}.` }}</span>
     <span class="token-fractional">{{ fractionalPart }}</span>
   </div>
 </template>
@@ -26,16 +25,25 @@ export default {
 <style lang="scss">
 @use '../../../styles/typography';
 
-  .ae-balance {
-    .token-symbol {
-      @extend %face-sans-24-600;
-    }
-    .token-integer {
-      @extend %face-sans-30-600;
-    }
-    .token-fractional {
-      @extend %face-sans-24-600;
-      opacity: 0.75;
-    }
+.ae-balance {
+  display: flex;
+  align-items: baseline;
+
+  .token-symbol {
+    @extend %face-sans-24-bold;
+
+    margin-right: 4px;
   }
+
+  .token-integer {
+    @extend %face-sans-30-bold;
+  }
+
+  .token-fractional {
+    @extend %face-sans-24-bold;
+
+    line-height: 32px;
+    opacity: 0.75;
+  }
+}
 </style>

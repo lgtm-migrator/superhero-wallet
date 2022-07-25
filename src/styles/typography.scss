@@ -7,16 +7,16 @@
 @import '~@fontsource/ibm-plex-mono/500.css';
 @import 'variables';
 
-%face-sans-30-600 {
+%face-sans-30-bold {
   font-family: $font-sans;
-  font-weight: 600;
+  font-weight: bold;
   font-size: 30px;
-  line-height: 24px;
+  line-height: 32px;
 }
 
-%face-sans-24-600 {
+%face-sans-24-bold {
   font-family: $font-sans;
-  font-weight: 600;
+  font-weight: bold;
   font-size: 24px;
   line-height: 24px;
 }
@@ -52,13 +52,6 @@
 %face-sans-16-bold {
   font-family: $font-sans;
   font-weight: bold;
-  font-size: 16px;
-  line-height: 24px;
-}
-
-%face-sans-16-600 {
-  font-family: $font-sans;
-  font-weight: 600;
   font-size: 16px;
   line-height: 24px;
 }

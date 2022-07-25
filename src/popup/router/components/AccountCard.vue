@@ -1,19 +1,13 @@
 <template>
   <div
-    :class="[
-      'account-card',
-      { subaccount: idx !== 0, 'first-subaccount': idx === 1, minified: cardMinified }]"
+    class="account-card"
     :style="cardCssProps"
   >
-    <div class="account-info">
-      <AccountInfo
-        v-bind="$attrs"
-        :color="color"
-      />
-    </div>
-    <div class="balance-info">
-      <BalanceInfo v-bind="$attrs" />
-    </div>
+    <AccountInfo
+      v-bind="$attrs"
+      :color="color"
+    />
+    <BalanceInfo v-bind="$attrs" />
     <div class="misc">
       <div class="total-tokens">
         <span class="digit">
@@ -23,28 +17,20 @@
           {{ $t('pages.fungible-tokens.tokens') }}
         </span>
       </div>
-      <div
-        class="receiveIcon"
-        :to="{ name: 'name-claim' }"
-      >
-        <ReceiveIcon
-          :style="iconCssProps"
-        />
-      </div>
-      <div
-        class="sendIcon"
-        :to="{ name: 'name-claim' }"
-      >
-        <SendIcon
-          :style="iconCssProps"
-        />
+      <div class="buttons">
+        <RouterLink :to="{ name: 'transfer-receive' }">
+          <ReceiveIcon :style="iconCssProps" />
+        </RouterLink>
+        <RouterLink :to="{ name: 'transfer-send' }">
+          <SendIcon :style="iconCssProps" />
+        </RouterLink>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex';
+import { mapGetters } from 'vuex';
 import AccountInfo from './AccountInfo.vue';
 import BalanceInfo from './BalanceInfo.vue';
 import ReceiveIcon from '../../../icons/account-card/account-receive.svg?vue-component';
@@ -60,10 +46,8 @@ export default {
   },
   props: {
     idx: { type: Number, required: true },
-    shift: { type: Number, required: true },
   },
   computed: {
-    ...mapState(['cardMinified']),
     ...mapGetters('fungibleTokens', ['getTokenBalance']),
     ...mapGetters(['accounts']),
     cardCssProps() {
@@ -93,58 +77,48 @@ export default {
   flex-direction: column;
   width: 328px;
   height: 192px;
-  border-radius: 12px;
+  border-radius: 16px;
   margin: 8px 16px 32px 16px;
+  padding: 12px;
   align-items: flex-start;
+  cursor: pointer;
 
-    .account-info {
-      flex: 1.3;
+  .balance-info {
+    margin-top: 12px;
+    align-self: center;
+  }
+
+  .misc {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex: 1;
+
+    .total-tokens {
+      @extend %face-sans-14-medium;
+
+      line-height: 16px;
+
+      .wording {
+        opacity: 0.85;
+      }
     }
 
-    .balance-info {
-      flex:1.7;
-      align-self: center;
-      margin-bottom: 0;
-    }
+    .buttons {
+      display: flex;
 
-    .misc {
-      flex:1;
-      margin-left: 12px;
-      margin-bottom: 12px;
-      width: 100%;
-      display:flex;
-      flex-direction: row;
-      align-items: flex-end;
-
-      .total-tokens {
-        @extend %face-sans-14-medium;
-        order:1;
-
-        .wording {
-          opacity: 0.85;
-        }
-      }
-
-      .receiveIcon {
-        order:2;
-        align-self: flex-end;
-        margin-left: auto;
-
-        svg path{
-          fill: var(--primaryColor);
-        }
-      }
-
-      .sendIcon {
-        order:3;
-        align-self: flex-end;
+      a {
         margin-left: 8px;
-        margin-right: 28px;
 
-        path{
-          fill: var(--primaryColor);
+        svg {
+          height: 36px;
+          width: 36px;
+          color: var(--primaryColor);
         }
       }
     }
+  }
 }
 </style>

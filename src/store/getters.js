@@ -12,7 +12,6 @@ import {
   aettosToAe,
   categorizeContractCallTxObject,
 } from '../popup/utils/helper';
-import { i18n } from './plugins/languages';
 
 const getHdWalletAccount = (wallet, accountIdx = 0) => {
   const keyPair = getKeyPair(derivePathFromKey(`${accountIdx}h/0h/0h`, wallet).privateKey);
@@ -37,12 +36,9 @@ export default {
         ...acc,
         ...(type === 'hd-wallet' ? getHdWalletAccount(getters.wallet, idx) : {}),
       }))
-      .map(({ idx, localName, ...account }) => ({
-        idx,
+      .map(({ ...account }) => ({
         ...account,
         name: getters['names/getDefault'](account.address),
-        localName:
-          localName || (idx === 0 ? i18n.t('mainAccount') : i18n.t('subaccountName', { idx })),
       }));
   },
   account({ accounts: { activeIdx } }, { accounts }) {
@@ -69,7 +65,7 @@ export default {
     return networks[network];
   },
   getProfileImage: (_, { activeNetwork }) => (address) => `${activeNetwork.backendUrl}/profile/image/${address}`,
-  getAvatar: () => (address, color) => `${AVATAR_URL}${address}?color=${encodeURIComponent(color)}`,
+  getAvatar: () => (address) => `${AVATAR_URL}${address}`,
   tippingSupported(state, { activeNetwork }) {
     return (
       ['ae_mainnet', 'ae_uat'].includes(activeNetwork.networkId) || process.env.RUNNING_IN_TESTS
