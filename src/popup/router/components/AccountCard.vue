@@ -78,7 +78,7 @@ export default {
   width: 328px;
   height: 192px;
   border-radius: 16px;
-  margin: 8px 16px 32px 16px;
+  margin: 8px 16px 16px 16px;
   padding: 12px;
   align-items: flex-start;
   cursor: pointer;

@@ -16,7 +16,6 @@
       />
     </div>
     <div
-      v-if="filteredAccounts.length > 1"
       class="buttons"
     >
       <ButtonPlain
@@ -24,7 +23,14 @@
         :key="idx"
         :class="{ selected: account.i === activeIdx }"
         @click="selectAccount(account.i)"
+        :style="buttonCssVars"
       />
+      <Button
+        :class="{ activeNewCard: isAddNewCardSelected }"
+        @click="selectAddAccount()"
+      >
+        <PlusCircleIcon />
+      </Button>
     </div>
   </div>
 </template>
@@ -33,10 +39,17 @@
 import { mapState, mapGetters } from 'vuex';
 import AccountCard from './AccountCard.vue';
 import ButtonPlain from './ButtonPlain.vue';
+import { getAddressColor } from '../../utils/avatar';
+import PlusCircleIcon from '../../../icons/plus-circle-fill.svg?vue-component';
 
 export default {
-  components: { AccountCard, ButtonPlain },
+  components: { AccountCard, ButtonPlain, PlusCircleIcon },
   props: { notification: Boolean },
+  data() {
+    return {
+      isAddNewCardSelected: false,
+    };
+  },
   computed: {
     ...mapState('accounts', ['activeIdx']),
     ...mapGetters(['accounts']),
@@ -52,11 +65,23 @@ export default {
     selectedCardNumber() {
       return this.filteredAccounts.findIndex((a) => a.i === this.activeIdx);
     },
+    color() {
+      return getAddressColor(this.accounts[this.activeIdx].address);
+    },
+    buttonCssVars() {
+      return {
+        '--activeColor': this.color,
+      };
+    },
   },
   methods: {
     async selectAccount(idx) {
+      this.isAddNewCardSelected = false;
       await this.$watchUntilTruly(() => this.$store.state.middleware);
       this.$store.commit('accounts/setActiveIdx', idx);
+    },
+    async selectAddAccount() {
+      this.isAddNewCardSelected = true;
     },
   },
 };
@@ -80,7 +105,6 @@ export default {
     display: flex;
     width: calc(var(--nextAccountIdx) * (328px + 4px) + 16px + 16px - 4px);
     align-self: center;
-    margin-bottom: 16px;
     transition: margin-left 0.5s ease-out;
     margin-left: calc(var(--activeIdx) * (-328px - 4px));
 
@@ -105,18 +129,13 @@ export default {
   .buttons {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     padding-bottom: 12px;
+    margin-left: 28px;
+    max-width: 50%;;
 
     .button-plain {
-      width: 32px;
-      height: 13px;
-      background: variables.$color-bg-3;
-      border: 1px solid variables.$color-border;
-      box-sizing: border-box;
-      box-shadow: inset 0 0 6px rgb(0 0 0 / 25%);
-      border-radius: 8px;
-      margin-right: 8px;
+        background-color: #434343;
 
       &:hover:not(.selected) {
         border-color: variables.$color-border-hover;
@@ -128,10 +147,18 @@ export default {
 
       &.selected {
         cursor: default;
-        background: radial-gradient(50% 50% at 50% 50%, #00fd9c 0%, rgba(0, 253, 156, 0.8) 100%);
-        border: 2px solid rgba(5, 87, 56);
-        box-shadow: 0 0 6px rgb(0 253 156 / 44%);
+        background-color: var(--activeColor);
       }
+    }
+
+    .activeNewCard {
+      path {
+        fill: variables.$color-add-account !important;
+      }
+    }
+
+    .lastButton {
+      width:3% !important;
     }
   }
 }

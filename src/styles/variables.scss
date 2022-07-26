@@ -31,3 +31,10 @@ $color-hover: #1c1c1c;
 
 $color-warning: #ffaa29;
 $color-error: #ff4746;
+
+$color-account-blue: #3270FF;
+$color-add-account: #05d3a1;
+
+:export {
+  defaultAccountColor: $color-account-blue;
+}

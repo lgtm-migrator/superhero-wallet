@@ -8,11 +8,14 @@
 </template>
 
 <style lang="scss" scoped>
+@use '../../../styles/variables';
+
 .button-plain {
   padding: 0;
-  border: none;
-  outline: none;
-  background: transparent;
   cursor: pointer;
+  width:8px;
+  height:8px;
+  border-radius: 50%;
+  margin-right: 8px;
 }
 </style>

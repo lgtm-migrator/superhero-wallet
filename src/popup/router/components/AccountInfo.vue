@@ -19,13 +19,13 @@
           >
             {{ $t('pages.account.heading') }} {{ accountIdx + 1 }}
           </span>
-          <ButtonPlain
+          <a
             class="ae-address"
             data-cy="copy"
             @click="copy"
           >
             {{ truncateAdrress(accounts[idx].address) }}
-          </ButtonPlain>
+          </a>
         </template>
         <div
           v-else
@@ -43,14 +43,12 @@
 import { mapState, mapGetters } from 'vuex';
 import CopyMixin from '../../../mixins/copy';
 import Avatar from './Avatar.vue';
-import ButtonPlain from './ButtonPlain.vue';
 import CheckedCircleIcon from '../../../icons/account-card/checked-circle.svg?vue-component';
 import Truncate from './Truncate.vue';
 
 export default {
   components: {
     Avatar,
-    ButtonPlain,
     CheckedCircleIcon,
     Truncate,
   },
@@ -126,7 +124,7 @@ export default {
         opacity: 0.85;
         margin-top: 8px;
         letter-spacing: -1px;
-
+        text-decoration-line: none;
         &:hover {
           opacity: 1;
         }
