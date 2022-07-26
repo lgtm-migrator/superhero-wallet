@@ -71,9 +71,13 @@ export default {
   },
   methods: {
     truncateAdrress() {
-      const addressFields = this.accounts[this.idx].address.match(/.{3}/g);
-      return `${addressFields.slice(0, 3).reduce((acc, current) => `${acc} ${current}`)} ···
-      ${addressFields.slice(-3).reduce((acc, current) => `${acc} ${current}`)}`;
+      const { address } = this.accounts[this.idx];
+      const addressLength = address.length;
+      const firstPart = address.slice(0, addressLength / 2).match(/.{3}/g);
+      const secondPart = address.slice(addressLength / 2, addressLength).match(/.{3}/g);
+
+      return `${firstPart.slice(0, 3).reduce((acc, current) => `${acc} ${current}`)} ···
+      ${secondPart.slice(-3).reduce((acc, current) => `${acc} ${current}`)}`;
     },
   },
 };

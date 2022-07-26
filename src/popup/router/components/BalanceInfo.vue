@@ -47,6 +47,7 @@ export default {
 
     line-height: 18px;
     margin-top: 4px;
+    opacity: 0.75;
   }
 }
 </style>
