@@ -19,6 +19,7 @@
         hollow,
         'icon-text': iconText,
         'new-ui': newUi,
+        'no-margin': noMargin,
       },
     ]"
     v-on="$listeners"
@@ -40,7 +41,7 @@ export default {
   props: {
     fill: {
       type: String,
-      validator: (value) => ['primary', 'secondary', 'alternative'].includes(value),
+      validator: (value) => ['primary', 'secondary', 'alternative', 'red', 'red-2', 'purple'].includes(value),
       default: 'primary',
     },
     text: { type: String, default: '' },
@@ -56,6 +57,7 @@ export default {
     hollow: Boolean,
     iconText: Boolean,
     newUi: Boolean,
+    noMargin: Boolean,
   },
   computed: {
     isLinkOnSameHost() {
@@ -101,12 +103,8 @@ export default {
   &.primary {
     background-color: variables.$color-blue;
 
-    &:hover {
-      background-color: variables.$color-primary-hover;
-    }
-
     &:active {
-      background: rgba(variables.$color-blue, 0.9);
+      background-color: rgba(variables.$color-blue, 0.9);
     }
   }
 
@@ -114,13 +112,38 @@ export default {
     background-color: variables.$color-border;
     color: variables.$color-light-grey;
 
-    &:hover {
-      background-color: variables.$color-hover;
-      color: variables.$color-white;
+    &:active {
+      background-color: variables.$color-darker-grey;
+      color: rgba(variables.$color-white, 0.8);
     }
+  }
+
+  &.red {
+    background-color: variables.$color-red-dark;
+    color: variables.$color-white;
 
     &:active {
-      background: variables.$color-darker-grey;
+      background-color: variables.$color-red-dark;
+      color: rgba(variables.$color-white, 0.8);
+    }
+  }
+
+  &.red-2 {
+    background-color: variables.$color-red-2;
+    color: variables.$color-white;
+
+    &:active {
+      background-color: variables.$color-red-2;
+      color: rgba(variables.$color-white, 0.8);
+    }
+  }
+
+  &.purple {
+    background-color: variables.$color-purple;
+    color: variables.$color-white;
+
+    &:active {
+      background: variables.$color-purple;
       color: rgba(variables.$color-white, 0.8);
     }
   }
@@ -228,17 +251,35 @@ export default {
 
   &.new-ui {
     border-radius: variables.$border-radius-interactive;
-    width: auto;
-    padding: 5px 20px;
+    padding: 5px 16px;
     line-height: 20px;
     flex: 1 1 0;
     cursor: pointer;
+    font-weight: 500;
+    position: relative;
+
+    &::after {
+      position: absolute;
+      content: '';
+      inset: 0;
+      border-radius: variables.$border-radius-interactive;
+      background-color: variables.$color-bg-6;
+      opacity: 0;
+    }
+
+    &:hover::after {
+      opacity: 0.2;
+    }
 
     &.secondary {
       background-color: variables.$color-medium-grey;
 
       &:hover {
         background-color: rgba(variables.$color-white, 0.2);
+
+        &::after {
+          opacity: 0.2;
+        }
       }
     }
 
@@ -253,6 +294,10 @@ export default {
     &.extend {
       width: 100%;
     }
+  }
+
+  &.no-margin {
+    margin: 0;
   }
 }
 </style>
