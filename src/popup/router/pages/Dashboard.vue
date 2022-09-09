@@ -90,6 +90,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
+import { isEmpty } from 'lodash-es';
 import AccountSwitcher from '../components/AccountSwitcher.vue';
 import {
   MODAL_TRANSFER_RECEIVE,
@@ -131,6 +132,19 @@ export default {
     ...mapGetters(['getAccountPendingTransactions']),
     ...mapState('accounts', ['activeIdx']),
   },
+  watch: {
+    activeIdx() { // TODO: remove it, maybe by extracting transactions entity
+      this.$store.commit('initTransactions');
+    },
+    $route: {
+      immediate: true,
+      handler({ query }) {
+        if (!isEmpty(query)) {
+          this.$store.dispatch('modals/open', { name: MODAL_TRANSFER_SEND });
+        }
+      },
+    },
+  },
   methods: {
     openTransferReceiveModal() {
       this.$store.dispatch('modals/open', {
@@ -141,9 +155,6 @@ export default {
       this.$store.dispatch('modals/open', {
         name: MODAL_TRANSFER_SEND,
       });
-    },
-    activeIdx() { // TODO: remove it, maybe by extracting transactions entity
-      this.$store.commit('initTransactions');
     },
   },
 };
