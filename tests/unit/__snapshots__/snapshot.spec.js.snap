@@ -4,76 +4,208 @@ exports[`Pages About 1`] = `
 <div
   class="about"
 >
-  <svg
-    class="logo"
-  />
-   
-  <p>
-    <span
-      class="version"
+  <div
+    class="table"
+  >
+    <div
+      class="table-item"
     >
+      <div
+        class="name"
+      >
+        
+        locale-specific-text
       
-      commit
+      </div>
+       
+      <div
+        class="value"
+      >
+        
+        Superhero Wallet
       
-      <a
-        href="https://github.com/aeternity/superhero-wallet/commit/a1c1c5acc851c49248aad87088963f9ae5fb200e"
-        target="_blank"
+      </div>
+    </div>
+     
+    <a
+      class="table-item dark link"
+      href="https://github.com/aeternity/superhero-wallet/commit/a1c1c5acc851c49248aad87088963f9ae5fb200e"
+      target="_blank"
+    >
+      <div
+        class="name"
+      >
+        
+        locale-specific-text
+      
+      </div>
+       
+      <div
+        class="value"
       >
         
         a1c1c5a
-      </a>
-      
-      / version-specific-text
-    
-    </span>
-  </p>
-   
-  <hr />
-   
-  <div
-    class="waellet-links"
-  >
-    <a
-      href="https://superhero.com/faq"
-      target="_blank"
-    >
-      FAQ
+        
+        <svg />
+      </div>
     </a>
      
-    <router-link-stub
-      data-cy="terms"
-      to="/about/termsOfService"
+    <div
+      class="table-item"
     >
+      <div
+        class="name"
+      >
+        
+        locale-specific-text
       
-      locale-specific-text
-    
-    </router-link-stub>
+      </div>
+       
+      <div
+        class="value"
+      >
+        
+        version-specific-text
+      
+      </div>
+    </div>
      
-    <router-link-stub
-      data-cy="privacy"
-      to="/about/privacyPolicy"
+    <div
+      class="table-item dark"
     >
+      <div
+        class="name"
+      >
+        
+        locale-specific-text
       
-      locale-specific-text
-    
-    </router-link-stub>
+      </div>
+       
+      <div
+        class="value"
+      >
+        
+        11.0.1
+      
+      </div>
+    </div>
      
     <a
-      class="button primary"
-      href="https://thesuperherowallet.typeform.com/to/vh8Ffu"
+      class="table-item link"
+      href="undefined/status"
       target="_blank"
     >
+      <div
+        class="name"
+      >
+        
+        locale-specific-text
       
-      locale-specific-text
-    
+      </div>
+       
+      <div
+        class="value"
+      >
+        
+        
+        
+        <svg />
+      </div>
+    </a>
+     
+    <a
+      class="table-item dark link"
+      href="undefined/status"
+      target="_blank"
+    >
+      <div
+        class="name"
+      >
+        
+        locale-specific-text
+      
+      </div>
+       
+      <div
+        class="value"
+      >
+        
+        
+        
+        <svg />
+      </div>
     </a>
   </div>
+   
+  <a
+    class="panel-item"
+  >
+    <div
+      class="panel-item-left"
+    >
+      <svg />
+       
+      <div
+        class="panel-item-title"
+      >
+        
+      locale-specific-text
+    
+      </div>
+    </div>
+     
+    <div
+      class="panel-item-right"
+    >
+      <div
+        class="panel-item-info"
+      >
+        
+      
+    
+      </div>
+       
+      <svg />
+    </div>
+  </a>
+   
+  <a
+    class="panel-item"
+  >
+    <div
+      class="panel-item-left"
+    >
+      <svg />
+       
+      <div
+        class="panel-item-title"
+      >
+        
+      locale-specific-text
+    
+      </div>
+    </div>
+     
+    <div
+      class="panel-item-right"
+    >
+      <div
+        class="panel-item-info"
+      >
+        
+      
+    
+      </div>
+       
+      <svg />
+    </div>
+  </a>
 </div>
 `;
 
 exports[`Pages Index 1`] = `
 <div
-  class="index new-ui"
+  class="index"
 >
   <div
     class="not-iframe"
@@ -83,11 +215,15 @@ exports[`Pages Index 1`] = `
     <div
       class="heading"
     >
-      <!---->
+      <span
+        class="tag"
+        path="pages.index.heading.message"
+        tag="span"
+      />
     </div>
      
     <div
-      class="platforms new-ui agreed"
+      class="platforms agreed"
     >
       <div
         class="heading"
@@ -117,7 +253,7 @@ exports[`Pages Index 1`] = `
               <img
                 alt="Firefox"
                 class="grey"
-                src="../../../icons/platforms/firefox.svg"
+                src="../../icons/platforms/firefox.svg"
               />
             </a>
              
@@ -128,7 +264,7 @@ exports[`Pages Index 1`] = `
               <img
                 alt="Chrome"
                 class=""
-                src="../../../icons/platforms/chrome.svg"
+                src="../../icons/platforms/chrome.svg"
               />
             </a>
           </div>
@@ -151,7 +287,7 @@ exports[`Pages Index 1`] = `
               <img
                 alt="App Store"
                 class="grey"
-                src="../../../icons/platforms/app-store.svg"
+                src="../../icons/platforms/app-store.svg"
               />
             </a>
              
@@ -162,7 +298,7 @@ exports[`Pages Index 1`] = `
               <img
                 alt="Google Play"
                 class="grey"
-                src="../../../icons/platforms/google-play.svg"
+                src="../../icons/platforms/google-play.svg"
               />
             </a>
           </div>
@@ -196,17 +332,20 @@ exports[`Pages Index 1`] = `
         class="checkmark checked"
       />
        
-      <span>
-        
+      <div
+        class="label-text"
+      >
+        <span>
+          
         locale-specific-text
       
-      </span>
+        </span>
+      </div>
     </label>
      
     <a
       class="terms-of-use agreed"
       data-cy="terms"
-      href="https://wallet.superhero.com/about/termsOfService"
     >
       
       locale-specific-text
@@ -218,10 +357,9 @@ exports[`Pages Index 1`] = `
     class="wallet-button-box"
   >
     <button
-      class="button button-subheader alternative extend new-ui"
+      class="btn-main button-subheader alternative extend"
       data-cy="generate-wallet"
       style=""
-      to=""
     >
       <div
         class="box"
@@ -251,10 +389,9 @@ exports[`Pages Index 1`] = `
     </button>
      
     <button
-      class="button button-subheader alternative extend new-ui"
+      class="btn-main button-subheader alternative extend"
       data-cy="import-wallet"
       style=""
-      to=""
     >
       <div
         class="box"
@@ -288,7 +425,7 @@ exports[`Pages Index 1`] = `
 
 exports[`Pages Index 2`] = `
 <div
-  class="index new-ui"
+  class="index"
 >
   <div
     class="not-iframe"
@@ -298,14 +435,18 @@ exports[`Pages Index 2`] = `
     <div
       class="heading"
     >
-      <!---->
+      <span
+        class="tag"
+        path="pages.index.heading.message"
+        tag="span"
+      />
     </div>
      
     <!---->
   </div>
    
   <div
-    class="terms-agreement"
+    class="terms-agreement mobile"
   >
     <label
       class="checkbox-container agreed"
@@ -321,17 +462,20 @@ exports[`Pages Index 2`] = `
         class="checkmark checked"
       />
        
-      <span>
-        
+      <div
+        class="label-text"
+      >
+        <span>
+          
         locale-specific-text
       
-      </span>
+        </span>
+      </div>
     </label>
      
     <a
       class="terms-of-use agreed"
       data-cy="terms"
-      href="https://wallet.superhero.com/about/termsOfService"
     >
       
       locale-specific-text
@@ -343,10 +487,9 @@ exports[`Pages Index 2`] = `
     class="wallet-button-box"
   >
     <button
-      class="button button-subheader alternative extend new-ui"
+      class="btn-main button-subheader alternative extend"
       data-cy="generate-wallet"
       style=""
-      to=""
     >
       <div
         class="box"
@@ -376,10 +519,9 @@ exports[`Pages Index 2`] = `
     </button>
      
     <button
-      class="button button-subheader alternative extend new-ui"
+      class="btn-main button-subheader alternative extend"
       data-cy="import-wallet"
       style=""
-      to=""
     >
       <div
         class="box"
@@ -413,14 +555,14 @@ exports[`Pages Index 2`] = `
 
 exports[`Pages Index 3`] = `
 <div
-  class="index new-ui"
+  class="index"
 >
   <img
-    src="../../../icons/iframe/sendAndReceive.svg"
+    src="../../icons/iframe/sendAndReceive.svg"
   />
    
   <div
-    class="terms-agreement"
+    class="terms-agreement mobile"
   >
     <label
       class="checkbox-container agreed"
@@ -436,17 +578,20 @@ exports[`Pages Index 3`] = `
         class="checkmark checked"
       />
        
-      <span>
-        
+      <div
+        class="label-text"
+      >
+        <span>
+          
         locale-specific-text
       
-      </span>
+        </span>
+      </div>
     </label>
      
     <a
       class="terms-of-use agreed"
       data-cy="terms"
-      href="https://wallet.superhero.com/about/termsOfService"
     >
       
       locale-specific-text
@@ -458,10 +603,9 @@ exports[`Pages Index 3`] = `
     class="wallet-button-box"
   >
     <button
-      class="button button-subheader alternative extend new-ui"
+      class="btn-main button-subheader alternative extend"
       data-cy="generate-wallet"
       style=""
-      to=""
     >
       <div
         class="box"
@@ -491,10 +635,9 @@ exports[`Pages Index 3`] = `
     </button>
      
     <button
-      class="button button-subheader alternative extend new-ui"
+      class="btn-main button-subheader alternative extend"
       data-cy="import-wallet"
       style=""
-      to=""
     >
       <div
         class="box"
@@ -530,10 +673,6 @@ exports[`Pages PrivacyPolicy 1`] = `
 <div
   class="privacy-policy"
 >
-  <h2>
-    locale-specific-text
-  </h2>
-   
   <p>
     <em>
       The present Privacy Policy is effective since on 9th April 2020.
@@ -1700,14 +1839,6 @@ exports[`Pages TermsOfService 1`] = `
 <div
   class="terms-of-service"
 >
-  <h1
-    class="bolder"
-  >
-    
-    TERMS OF USE
-  
-  </h1>
-   
   <p
     class="italic"
   >
