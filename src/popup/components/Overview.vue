@@ -39,10 +39,7 @@
     </div>
 
     <div class="details">
-      <div
-        class="sender"
-        data-cy="sender"
-      >
+      <div class="sender">
         <a
           :href="sender.url"
           target="_blank"
@@ -54,7 +51,12 @@
           hide-icon
           :value="sender.address"
         >
-          <span class="text-address text-left">{{ senderAddress }}</span>
+          <span
+            class="text-address text-left"
+            data-cy="sender-address"
+          >
+            {{ senderAddress }}
+          </span>
         </CopyText>
       </div>
       <div
@@ -81,7 +83,12 @@
           hide-icon
           :value="recipient.address"
         >
-          <span class="text-address">{{ recipientAddress }}</span>
+          <span
+            class="text-address"
+            data-cy="recipient-address"
+          >
+            {{ recipientAddress }}
+          </span>
         </CopyText>
       </div>
     </div>
