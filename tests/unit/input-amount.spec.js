@@ -2,8 +2,11 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import BigNumber from 'bignumber.js';
 import { mount } from '@vue/test-utils';
+import VueCompositionApi from '@vue/composition-api';
 import InputAmount from '../../src/popup/components/InputAmount.vue';
 import veeValidate from '../../src/store/plugins/veeValidate';
+
+Vue.use(VueCompositionApi);
 
 Object.assign(Vue.prototype, {
   $t: () => 'locale-specific-text',

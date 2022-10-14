@@ -1,6 +1,9 @@
 import Vue from 'vue';
+import VueCompositionApi from '@vue/composition-api';
 import { mount } from '@vue/test-utils';
 import AccountImport from '../../src/popup/components/Modals/AccountImport.vue';
+
+Vue.use(VueCompositionApi);
 
 Object.assign(Vue.prototype, {
   $t: () => 'locale-specific-text',

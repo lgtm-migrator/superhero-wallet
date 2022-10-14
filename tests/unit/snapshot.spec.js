@@ -1,9 +1,12 @@
 import Vue from 'vue';
+import VueCompositionApi from '@vue/composition-api';
 import { mount, RouterLinkStub } from '@vue/test-utils';
 import Index from '../../src/popup/pages/Index.vue';
 import About from '../../src/popup/pages/About.vue';
 import TermsOfService from '../../src/popup/pages/TermsOfService.vue';
 import PrivacyPolicy from '../../src/popup/pages/PrivacyPolicy.vue';
+
+Vue.use(VueCompositionApi);
 
 Object.assign(Vue.prototype, {
   $t: () => 'locale-specific-text',

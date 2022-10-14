@@ -7,6 +7,9 @@ const packagesToTranspile = [
 
 module.exports = {
   preset: '@vue/cli-plugin-unit-jest',
+  moduleFileExtensions: [
+    'js', 'mjs', 'cjs', 'jsx', 'ts', 'tsx', 'json', 'node',
+  ],
   transformIgnorePatterns: [
     `node_modules/(?!(${packagesToTranspile.join('|')})/)`,
   ],
@@ -17,4 +20,8 @@ module.exports = {
   setupFiles: [
     '<rootDir>/config/jest/setEnvVars.js',
   ],
+  transform: {
+    '^.+\\.(ts|tsx)$': 'ts-jest',
+    '^.+\\.vue$': 'vue-jest',
+  },
 };
