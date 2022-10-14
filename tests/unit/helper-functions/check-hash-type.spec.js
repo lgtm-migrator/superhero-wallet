@@ -1,9 +1,12 @@
 import { checkHashType } from '../../../src/popup/utils';
 
-const testHashes = [{
+const testErrors = [{
   hash: null,
-  error: true,
 }, {
+  hash: undefined,
+}];
+
+const testHashes = [{
   hash: 'ak_USd42orxJjEedPzUvFizdtEmURTGdVoiubu6LJoNmxAbcek0',
   error: true,
 }, {
@@ -33,6 +36,9 @@ const testHashes = [{
 }];
 
 describe('checkHashType', () => {
+  testErrors.forEach((test) => it('should throw an error', () => {
+    expect(() => checkHashType(test.hash)).toThrow();
+  }));
   testHashes.forEach((test) => it('should be invalid if hash has improper length, contains invalid characters (0, J, O, l or symbols) or does not have ".chain" ending', () => {
     expect(checkHashType(test.hash).valid).toBe(!test.error);
   }));
