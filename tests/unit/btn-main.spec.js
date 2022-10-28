@@ -5,7 +5,7 @@ import BtnMain from '../../src/popup/components/buttons/BtnMain.vue';
 
 Vue.use(VueCompositionApi);
 
-describe('Button.vue', () => {
+describe('BtnMain', () => {
   it('adds prop.fill class', () => {
     const fill = 'primary';
     const wrapper = shallowMount(BtnMain, {
