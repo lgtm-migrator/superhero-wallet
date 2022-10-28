@@ -31,7 +31,10 @@
           :copied="copied"
           @click="copyAddress()"
         >
-          <Scrollable class="address-scrollable-area">
+          <Scrollable
+            class="address-scrollable-area"
+            hide-scrollbar
+          >
             <AddressFormatted
               :address="accountAddressToDisplay"
               :columns="!amount"

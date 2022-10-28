@@ -1,10 +1,21 @@
 <template>
   <div class="scrollable">
-    <div class="scrollable-inner">
+    <div
+      class="scrollable-inner"
+      :class="{'hide-scrollbar': hideScrollbar}"
+    >
       <slot />
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  props: {
+    hideScrollbar: Boolean,
+  },
+};
+</script>
 
 <style lang="scss" scoped>
 @use '../../styles/variables';
@@ -21,7 +32,8 @@
     left: 0;
     width: 100%;
     height: 100%;
-    overflow: scroll;
+    overflow-y: scroll;
+    scrollbar-width: auto;
     -ms-overflow-style: auto;
 
     &::-webkit-scrollbar {
@@ -33,6 +45,14 @@
         display: block;
         background-color: rgba(variables.$color-white, 0.15);
         border-radius: 4px;
+      }
+    }
+
+    &.hide-scrollbar {
+      scrollbar-width: none;
+
+      &::-webkit-scrollbar {
+        display: none;
       }
     }
   }

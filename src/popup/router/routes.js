@@ -327,6 +327,7 @@ export default [
       closeButton: true,
       hideNotificationsIcon: true,
       ifNotAuth: true,
+      scrollbarVisible: true,
     },
   },
   {
@@ -338,6 +339,7 @@ export default [
       backButton: true,
       closeButton: true,
       hideNotificationsIcon: true,
+      scrollbarVisible: true,
     },
   },
   {

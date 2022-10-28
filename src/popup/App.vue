@@ -18,12 +18,16 @@
     >
       <Header v-if="showStatusAndHeader" />
 
-      <transition :name="$route.meta.asModal ? 'pop-transition' : 'page-transition'">
-        <RouterView
-          :class="{ 'show-header': showStatusAndHeader }"
-          class="main"
-        />
-      </transition>
+      <div class="app-container">
+        <transition :name="$route.meta.asModal ? 'pop-transition' : 'page-transition'">
+          <Scrollable :hide-scrollbar="!$route.meta.scrollbarVisible">
+            <RouterView
+              :class="{ 'show-header': showStatusAndHeader }"
+              class="main"
+            />
+          </Scrollable>
+        </transition>
+      </div>
 
       <NodeConnectionStatus v-if="showStatusAndHeader" />
       <Component
@@ -47,12 +51,14 @@ import {
   IS_EXTENSION,
 } from '../lib/environment';
 import Header from './components/Header.vue';
+import Scrollable from './components/Scrollable.vue';
 import NodeConnectionStatus from './components/NodeConnectionStatus.vue';
 import Close from '../icons/close.svg?vue-component';
 
 export default {
   components: {
     Header,
+    Scrollable,
     NodeConnectionStatus,
     Close,
   },
@@ -71,7 +77,7 @@ export default {
       return this.$store.getters['modals/opened'];
     },
     displayAsMobileApp() {
-      return !IS_ANDROID;
+      return !IS_CORDOVA;
     },
   },
   watch: {
@@ -159,7 +165,13 @@ export default {
   .app-inner {
     width: 100%;
     height: 100%;
-    overflow-y: auto;
+    overflow: hidden;
+
+    .app-container {
+      width: 100%;
+      height: 100%;
+      overflow-y: auto;
+    }
   }
 
   .main {
@@ -177,13 +189,15 @@ export default {
     width: variables.$extension-width;
     height: 600px;
     overflow: hidden;
-    border-radius: variables.$border-radius-app;
     box-shadow: variables.$color-border 0 0 0 1px;
+
+    @include mixins.desktop {
+      border-radius: variables.$border-radius-app;
+    }
 
     @include mixins.mobile {
       width: 100%;
       height: 100%;
-      overflow: visible;
       box-shadow: none;
     }
   }
@@ -191,14 +205,12 @@ export default {
   &.show-header {
     --header-height: 40px;
 
-    .main {
-      padding-top: var(--header-height);
-      padding-top: calc(var(--header-height) + env(safe-area-inset-top));
+    .app-container {
+      height: calc(100% - var(--header-height) - env(safe-area-inset-top));
+      margin-top: calc(var(--header-height) + env(safe-area-inset-top));
 
       @include mixins.desktop {
-        padding-top: 0;
-        min-height: calc(100% - var(--header-height));
-        min-height: calc(100% - var(--header-height) - env(safe-area-inset-top));
+        margin-top: 0;
       }
     }
   }
