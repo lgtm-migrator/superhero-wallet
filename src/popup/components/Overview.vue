@@ -81,7 +81,7 @@
           hide-icon
           :value="recipient.address"
         >
-          <span class="text-address text-right">{{ recipientAddress }}</span>
+          <span class="text-address">{{ recipientAddress }}</span>
         </CopyText>
       </div>
     </div>
