@@ -1,11 +1,13 @@
 <template>
   <div class="transaction-list">
-    <Filters
-      v-if="displayFilter"
-      v-model="displayMode"
-      :filters="filters"
-      :scroll-top-threshold="scrollTopThreshold"
-    />
+    <transition name="slide">
+      <Filters
+        v-if="displayFilter"
+        v-model="displayMode"
+        :filters="filters"
+        :scroll-top-threshold="scrollTopThreshold"
+      />
+    </transition>
     <div
       class="list"
       data-cy="list"

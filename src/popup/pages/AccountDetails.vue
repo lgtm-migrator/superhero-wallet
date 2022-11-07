@@ -1,5 +1,8 @@
 <template>
-  <div class="account-details">
+  <div
+    ref="accountDetails"
+    class="account-details"
+  >
     <div class="account-info-wrapper">
       <AccountInfo
         :account-idx="activeIdx"
@@ -36,16 +39,17 @@
           :text="tab.text"
         />
       </Tabs>
-
-      <div
-        v-if="searchTermPlaceholder"
-        class="search-bar-wrapper"
-      >
-        <InputSearch
-          v-model="searchTerm"
-          :placeholder="searchTermPlaceholder"
-        />
-      </div>
+      <transition name="slide">
+        <div
+          v-if="showSearchBar"
+          class="search-bar-wrapper"
+        >
+          <InputSearch
+            v-model="searchTerm"
+            :placeholder="searchTermPlaceholder"
+          />
+        </div>
+      </transition>
     </div>
 
     <div class="tabs-content">
@@ -53,7 +57,10 @@
         name="fade-transition"
         mode="out-in"
       >
-        <RouterView :search-term="searchTerm" />
+        <RouterView
+          :search-term="searchTerm"
+          :display-filter="showSearchBar"
+        />
       </transition>
     </div>
   </div>
@@ -67,6 +74,7 @@ import {
   onMounted,
   ref,
 } from '@vue/composition-api';
+import { debounce } from 'lodash-es';
 import {
   MODAL_TRANSFER_RECEIVE,
   MODAL_TRANSFER_SEND,
@@ -106,7 +114,11 @@ export default defineComponent({
     InputSearch,
   },
   setup(props, { root }) {
+    const accountDetails = ref<HTMLElement>();
     const searchTerm = ref('');
+    const appInnerScrollTop = ref<number>(0);
+    const initialClientHeight = ref<number>(600);
+    const clientHeight = ref<number>(0);
     const isConnected = computed(() => root.$store.getters.isConnected);
     const account = computed(() => root.$store.getters.account);
     const activeIdx = computed(() => root.$store.state.accounts.activeIdx);
@@ -167,15 +179,58 @@ export default defineComponent({
       }
     });
 
+    const showSearchBar = computed<boolean>(() => {
+      if (
+        searchTerm.value || (
+          clientHeight.value > initialClientHeight.value
+          && appInnerScrollTop.value >= 120
+        )
+      ) return true;
+
+      return false;
+    });
+
+    const resizeObserver = new ResizeObserver(debounce((entries) => {
+      if (!Array.isArray(entries) || !entries.length) {
+        return;
+      }
+      const _clientHeight = entries[0].target.clientHeight;
+      if (_clientHeight && (
+        (clientHeight.value + 400) < _clientHeight || _clientHeight <= initialClientHeight.value)
+      ) {
+        clientHeight.value = _clientHeight;
+      }
+    }, 100));
+    const routerBeforeEach = root.$router.beforeEach((to, from, next) => {
+      if (to.name && to.name.includes('account-details')) {
+        clientHeight.value = 0;
+      }
+      next();
+    });
+
     onMounted(() => {
       if (IS_CORDOVA) {
         window.StatusBar.backgroundColorByHexString('#191919');
+      }
+      if (accountDetails.value && accountDetails.value.parentElement) {
+        resizeObserver.observe(accountDetails.value);
+        initialClientHeight.value = accountDetails.value.parentElement.clientHeight;
+        accountDetails.value.parentElement.addEventListener('scroll', () => {
+          appInnerScrollTop.value = accountDetails?.value?.parentElement?.scrollTop ?? 0;
+          clientHeight.value = accountDetails?.value?.clientHeight ?? 0;
+        });
       }
     });
 
     onBeforeUnmount(() => {
       if (IS_CORDOVA) {
         window.StatusBar.backgroundColorByHexString('#141414');
+      }
+      if (resizeObserver) {
+        resizeObserver.disconnect();
+      }
+      if (routerBeforeEach) {
+        routerBeforeEach();
       }
     });
 
@@ -185,7 +240,9 @@ export default defineComponent({
       activeIdx,
       searchTerm,
       searchTermPlaceholder,
+      showSearchBar,
       isConnected,
+      accountDetails,
     };
   },
 });
