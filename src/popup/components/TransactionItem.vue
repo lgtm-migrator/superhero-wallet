@@ -51,9 +51,9 @@
   </RouterLink>
 </template>
 
-<script>
-import { mapGetters } from 'vuex';
+<script lang="ts">
 import { SCHEMA } from '@aeternity/aepp-sdk';
+import { computed, defineComponent, PropType } from '@vue/composition-api';
 import {
   FUNCTION_TYPE_DEX,
   amountRounded,
@@ -66,8 +66,11 @@ import Pending from '../../icons/animated-pending.svg?vue-component';
 import Reverted from '../../icons/refresh.svg?vue-component';
 import Warning from '../../icons/warning.svg?vue-component';
 import TransactionTokens from './TransactionTokenRows.vue';
+import { useTransactionToken } from '../../composables';
+import { ITransaction, TransactionType } from '../../types';
+import store from '../../store';
 
-export default {
+export default defineComponent({
   components: {
     Pending,
     Reverted,
@@ -76,52 +79,73 @@ export default {
   },
   mixins: [transactionTokensMixin],
   props: {
-    transaction: { type: Object, required: true },
+    transaction: { type: Object as PropType<ITransaction>, required: true },
   },
-  computed: {
-    ...mapGetters(['account', 'getAmountFiat', 'activeNetwork']),
-    labels() {
-      if (this.txType && this.txType?.startsWith('name')) {
-        return ['AENS', this.$t('transaction.type')[this.txType]];
+  setup({ transaction }, { root }) {
+    const getAmountFiat = computed(() => store.getters.getAmountFiat);
+    const activeNetwork = computed(() => store.getters.activeNetwork);
+    const {
+      txType,
+      getTxDirection,
+      isAllowance,
+      isDex,
+      availableTokens,
+      account,
+      tokens,
+      isErrorTransaction,
+    } = useTransactionToken(transaction);
+
+    const labels = computed(() => {
+      const transactionTypes = root.$t('transaction.type') as Record<TransactionType, any>;
+      const transactionType = txType.value as TransactionType;
+
+      if (txType.value?.startsWith('name')) {
+        return ['AENS', transactionTypes[transactionType]];
       }
-      if (this.txType === SCHEMA.TX_TYPE.spend) {
-        return [this.$t('transaction.type.spendTx'), this.getTxDirection(this.transaction) === 'sent' ? this.$t('transaction.spendType.out') : this.$t('transaction.spendType.in')];
+      if (txType === SCHEMA.TX_TYPE.spend) {
+        return [root.$t('transaction.type.spendTx'), getTxDirection.value(transaction) === 'sent' ? root.$t('transaction.spendType.out') : root.$t('transaction.spendType.in')];
       }
-      if (this.isAllowance) {
-        return [this.$t('transaction.dexType.allow_token')];
+      if (isAllowance.value) {
+        return [root.$t('transaction.dexType.allow_token')];
       }
-      if (this.isDex) {
-        return ['DEX', FUNCTION_TYPE_DEX.pool.includes(this.transaction.tx.function)
-          ? this.$t('transaction.dexType.pool')
-          : this.$t('transaction.dexType.swap')];
+      if (isDex.value) {
+        return ['DEX', FUNCTION_TYPE_DEX.pool.includes(transaction.tx.function)
+          ? root.$t('transaction.dexType.pool')
+          : root.$t('transaction.dexType.swap')];
       }
-      if ((this.transaction.tx.contractId
-        && (this.activeNetwork.tipContractV1 === this.transaction.tx.contractId
-        || this.activeNetwork.tipContractV2 === this.transaction.tx.contractId)
-        && (this.transaction.tx.function === 'tip' || this.transaction.tx.function === 'retip')) || this.transaction.claim) {
-        return [this.$t('pages.token-details.tip'), this.transaction.claim ? this.$t('transaction.spendType.in') : this.$t('transaction.spendType.out')];
+      if ((transaction.tx.contractId
+        && (activeNetwork.value.tipContractV1 === transaction.tx.contractId
+          || activeNetwork.value.tipContractV2 === transaction.tx.contractId)
+        && (transaction.tx.function === 'tip' || transaction.tx.function === 'retip')) || transaction.claim) {
+        return [root.$t('pages.token-details.tip'), transaction.claim ? root.$t('transaction.spendType.in') : root.$t('transaction.spendType.out')];
       }
-      if (this.txType === SCHEMA.TX_TYPE.contractCall
-        && this.availableTokens[this.transaction.tx.contractId]
-        && (this.transaction.tx.function === 'transfer' || this.transaction.incomplete)) {
-        return [this.$t('transaction.type.spendTx'), this.transaction.tx.callerId === this.account.address
-          ? this.$t('transaction.spendType.out') : this.$t('transaction.spendType.in')];
+      if (txType === SCHEMA.TX_TYPE.contractCall
+        && availableTokens.value[transaction.tx.contractId]
+        && (transaction.tx.function === 'transfer' || transaction.incomplete)) {
+        return [root.$t('transaction.type.spendTx'), transaction.tx.callerId === account.value.address
+          ? root.$t('transaction.spendType.out') : root.$t('transaction.spendType.in')];
       }
-      return this.transaction.pending ? [] : [this.$t('transaction.type')[this.txType]];
-    },
-    fiatAmount() {
-      const aeToken = this.tokens?.find((t) => t?.isAe);
-      if (!aeToken || this.isErrorTransaction
-        || (this.isDex && FUNCTION_TYPE_DEX.pool.includes(this.transaction.tx.function))) return 0;
-      return this.getAmountFiat(amountRounded(aeToken.decimals
+
+      return transaction.pending ? [] : [transactionTypes[transactionType]];
+    });
+
+    const fiatAmount = computed(() => {
+      // TODO add type to tokens
+      const aeToken = tokens.value?.find((t: any) => t?.isAe);
+      if (!aeToken || isErrorTransaction
+        || (isDex.value && FUNCTION_TYPE_DEX.pool.includes(transaction.tx.function))) return 0;
+      return getAmountFiat.value(amountRounded(aeToken.decimals
         ? convertToken(aeToken.amount || 0, -aeToken.decimals) : aeToken.amount));
-    },
+    });
+
+    return {
+      labels,
+      fiatAmount,
+      formatDate,
+      formatTime,
+    };
   },
-  methods: {
-    formatDate,
-    formatTime,
-  },
-};
+});
 </script>
 
 <style lang="scss" scoped>
