@@ -131,6 +131,24 @@ button {
     margin-bottom: 0.45em;
     color: $color-white;
   }
+
+  &-description {
+    @extend %face-sans-14-light;
+
+    color: rgba($color-white, 0.75);
+    margin-bottom: 24px;
+    text-align: left;
+    white-space: pre-line;
+
+    a {
+      color: $color-primary;
+      text-decoration: none;
+    }
+
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+  }
 }
 
 .label-text {
